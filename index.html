@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coffeebreak Surprise Shop</title><link rel="icon" href="img/logo.png">
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(#ffe0ef,#ffc2dd);color:#5a1a3a;text-align:center}
+header{padding:16px}header img{width:90px}h1{margin:6px 0;color:#d6337a}
+.gift{width:160px;height:150px;margin:20px auto;position:relative;cursor:pointer}
+.box{position:absolute;bottom:0;width:160px;height:110px;background:#ff5fa2;border-radius:10px}
+.lid{position:absolute;top:10px;left:-8px;width:176px;height:34px;background:#ff3d8b;border-radius:8px;transition:.3s}
+.rib{position:absolute;left:70px;top:10px;width:20px;height:140px;background:#fff6b0}
+.cb{position:absolute;bottom:30px;width:160px;font:900 40px serif;color:#fff;text-shadow:2px 2px #b0145a}
+.shake{animation:sh .6s}.shake .lid{transform:translateY(-18px) rotate(-8deg)}
+@keyframes sh{0%,100%{transform:rotate(0)}20%{transform:rotate(-10deg)}40%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(6deg)}}
+.boxes{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:0 10px}
+.opt{background:#fff;border:3px solid #ffb3d1;border-radius:16px;padding:14px;width:150px;cursor:pointer}
+.opt.on{border-color:#d6337a;background:#fff0f7}.opt b{font-size:26px;color:#d6337a;display:block}
+.card{background:#fff;max-width:520px;margin:18px auto;border-radius:16px;padding:16px;text-align:left}
+input,select,textarea{width:100%;box-sizing:border-box;padding:10px;margin:5px 0;border:2px solid #ffb3d1;border-radius:10px;font-size:16px}
+button,.btn{display:block;width:100%;box-sizing:border-box;padding:14px;margin:8px 0;border:0;border-radius:12px;background:#d6337a;color:#fff;font-size:17px;text-decoration:none;text-align:center;cursor:pointer}
+.alt{background:#ff8fc0}.grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.grid figure{margin:0;width:100px;font-size:13px}.grid img{width:100px;height:100px;object-fit:cover;border-radius:12px;background:#fff}
+.note{background:#fff6b0;border-radius:10px;padding:10px;font-weight:600}#order{display:none}
+footer{font-size:12px;padding:20px;max-width:600px;margin:auto}
+</style></head><body>
+<header><img src="img/logo.png" alt="Coffeebreak logo"><h1>Coffeebreak Surprise Shop</h1><p>Karen shops for you. Pick a box and get a fun mystery mix of real Coffeebreak goods posted to you.</p></header>
+<div class="gift" id="gift" title="Tap to shake"><div class="rib"></div><div class="box"></div><div class="lid"></div><div class="cb">CB</div></div>
+<p id="shakemsg">Tap the box to give it a shake</p>
+<div class="boxes" id="boxes"></div>
+<p class="note" style="max-width:520px;margin:14px auto">Every box always contains products worth at least its price. No prizes, no odds, no gamble, just a surprise selection of real goods.</p>
+<h2>Your box might include</h2>
+<div class="grid">
+<figure><img src="img/hat.jpg" alt=""><figcaption>CB embroidered hats</figcaption></figure>
+<figure><img src="img/scarf.jpg" alt=""><figcaption>Head scarves</figcaption></figure>
+<figure><img src="img/plush.jpg" alt=""><figcaption>Pink plushies</figcaption></figure>
+<figure><img src="img/blanket.jpg" alt=""><figcaption>Sensory blankets</figcaption></figure>
+<figure><img src="img/tattoo.jpg" alt=""><figcaption>Corset flash prints</figcaption></figure>
+</div><p>Plus stickers and snacks.</p>
+<div class="card" id="form"><h2>Your details</h2>
+<label>Theme (optional)<select id="theme"><option>Any</option><option>Pink</option><option>Sensory / cosy</option><option>Music fan</option><option>Tattoo / art</option><option>Snacks</option></select></label>
+<label>Size note (optional)<input id="size" placeholder="e.g. hat size M, adult"></label>
+<input id="name" placeholder="Full name" required><textarea id="addr" rows="3" placeholder="Postal address" required></textarea><input id="email" type="email" placeholder="Email" required>
+<button id="go">Make my order</button><p id="err" style="color:#b0145a"></p></div>
+<div class="card" id="order"><h2>Order <span id="num"></span></h2><p id="sum"></p>
+<a class="btn" id="card" target="_blank" rel="noopener">Pay by card</a>
+<p>Or pay by PayID to <b>darkokaz@gmx.com</b> and quote your order number <b id="num2"></b>.</p>
+<a class="btn alt" id="mail">Email my order to Karen</a>
+<p class="note">Karen posts your surprise once payment arrives.</p></div>
+<footer>© Karen O'Brien (Coffeebreak). Karen O'Brien keeps all rights to this shop, its design, name and logo. Buyers may resell products they bought, but may not copy this shop or make their own version of it.</footer>
+<script>
+const B=[["small","Small",25],["medium","Medium",50],["large","Large",100]];let sel=B[1];
+const bx=document.getElementById('boxes');
+B.forEach(b=>{const d=document.createElement('div');d.className='opt'+(b==sel?' on':'');d.dataset.k=b[0];d.innerHTML=`Surprise Box ${b[1]}<b>$${b[2]}</b>at least $${b[2]} of goods`;d.onclick=()=>{sel=b;document.querySelectorAll('.opt').forEach(o=>o.classList.toggle('on',o==d))};bx.appendChild(d)});
+const g=document.getElementById('gift');g.onclick=()=>{g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');document.getElementById('shakemsg').textContent='Something lovely is inside'};
+const v=id=>document.getElementById(id).value.trim();
+document.getElementById('go').onclick=()=>{
+ if(!v('name')||!v('addr')||!/^\S+@\S+\.\S+$/.test(v('email'))){document.getElementById('err').textContent='Please fill in your name, address and a valid email.';return}
+ document.getElementById('err').textContent='';
+ const n='CBS-'+Date.now().toString(36).toUpperCase().slice(-6)+Math.floor(Math.random()*90+10);
+ num.textContent=num2.textContent=n;
+ const s=`Surprise Box ${sel[1]} ($${sel[2]} AUD) - Theme: ${v('theme')}${v('size')?' - Size: '+v('size'):''}`;sum.textContent=s;
+ card.href='https://coffeebreaks.itch.io/surprise-box-'+sel[0];
+ const body=`Order ${n}\n${s}\nName: ${v('name')}\nAddress: ${v('addr')}\nEmail: ${v('email')}\nPayment: card (itch) or PayID darkokaz@gmx.com`;
+ mail.href='mailto:songwriterkaz@gmail.com?subject='+encodeURIComponent('Surprise order '+n)+'&body='+encodeURIComponent(body);
+ order.style.display='block';order.scrollIntoView({behavior:'smooth'})};
+</script></body></html>
