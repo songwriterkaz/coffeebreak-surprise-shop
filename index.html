@@ -40,7 +40,7 @@ footer{font-size:12px;padding:20px;max-width:600px;margin:auto}
 <input id="name" placeholder="Full name" required><textarea id="addr" rows="3" placeholder="Postal address" required></textarea><input id="email" type="email" placeholder="Email" required>
 <button id="go">Make my order</button><p id="err" style="color:#b0145a"></p></div>
 <div class="card" id="order"><h2>Order <span id="num"></span></h2><p id="sum"></p>
-<a class="btn" id="card" target="_blank" rel="noopener">Pay by card</a>
+<a id="card" hidden></a>
 <p>Or pay by PayID to <b>darkokaz@gmx.com</b> and quote your order number <b id="num2"></b>.</p>
 <a class="btn alt" id="mail">Email my order to Karen</a>
 <p class="note">Karen posts your surprise once payment arrives.</p></div>
@@ -49,6 +49,7 @@ footer{font-size:12px;padding:20px;max-width:600px;margin:auto}
 const B=[["small","Small",25],["medium","Medium",50],["large","Large",100]];let sel=B[1];
 const bx=document.getElementById('boxes');
 B.forEach(b=>{const d=document.createElement('div');d.className='opt'+(b==sel?' on':'');d.dataset.k=b[0];d.innerHTML=`Surprise Box ${b[1]}<b>$${b[2]}</b>at least $${b[2]} of goods`;d.onclick=()=>{sel=b;document.querySelectorAll('.opt').forEach(o=>o.classList.toggle('on',o==d))};bx.appendChild(d)});
+const ab=document.createElement('button');ab.className='cbc-add';ab.textContent='Add selected box to cart';ab.onclick=()=>CBCart.add({id:'surprise-'+sel[0],name:'Surprise Box '+sel[1],price:sel[2]});bx.after(ab);
 const g=document.getElementById('gift');g.onclick=()=>{g.classList.remove('shake');void g.offsetWidth;g.classList.add('shake');document.getElementById('shakemsg').textContent='Something lovely is inside'};
 const v=id=>document.getElementById(id).value.trim();
 document.getElementById('go').onclick=()=>{
@@ -61,4 +62,4 @@ document.getElementById('go').onclick=()=>{
  const body=`Order ${n}\n${s}\nName: ${v('name')}\nAddress: ${v('addr')}\nEmail: ${v('email')}\nPayment: card (itch) or PayID darkokaz@gmx.com`;
  mail.href='mailto:songwriterkaz@gmail.com?subject='+encodeURIComponent('Surprise order '+n)+'&body='+encodeURIComponent(body);
  order.style.display='block';order.scrollIntoView({behavior:'smooth'})};
-</script></body></html>
+</script><script src="cb-cart.js" data-prefix="CBS"></script></body></html>
